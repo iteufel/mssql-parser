@@ -16,7 +16,7 @@ concurrency:
 jobs:
   publish:
     runs-on: ubuntu-latest
-    timeout-minutes: 40
+    timeout-minutes: 50
     permissions:
       contents: read
       id-token: write
@@ -36,9 +36,18 @@ jobs:
       # npm requires the package to exist before an OIDC trust can be configured.
       # This one-time interactive web login runs on the runner; no npm token secret.
       - name: Sign in to npm for the first publish
+        id: npm_login
         if: inputs.bootstrap
-        timeout-minutes: 15
-        run: npm login --auth-type=web --no-browser
+        timeout-minutes: 17
+        run: |
+          for attempt in 1 2 3; do
+            echo "::notice::npm sign-in attempt ${attempt}/3. Open the newest login link below and complete approval before it expires."
+            if npm login --auth-type=web --no-browser </dev/null; then
+              exit 0
+            fi
+          done
+          echo "::error::npm sign-in did not complete after three attempts. Re-run the workflow to get a new login link."
+          exit 1
       - name: Publish package
         timeout-minutes: 15
         # npm only waits for browser 2FA when both streams are terminals.
@@ -49,5 +58,5 @@ jobs:
         timeout-minutes: 10
         run: script -q -e -c 'npm trust github mssql-parser --repo iteufel/mssql-parser --file publish.yml --allow-publish --yes --no-browser' /dev/null
       - name: Remove bootstrap login
-        if: always() && inputs.bootstrap
+        if: always() && inputs.bootstrap && steps.npm_login.outcome == 'success'
         run: npm logout --registry=https://registry.npmjs.org

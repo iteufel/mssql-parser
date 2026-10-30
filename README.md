@@ -59,7 +59,7 @@ The build compiles both hosts, regenerates AST types from the pinned ScriptDOM v
 
 GitHub Actions builds, tests, and publishes to npm. Publish a GitHub release with a tag matching `package.json` (e.g. `v0.1.0`), or dispatch `publish.yml`. Routine releases authenticate using npm trusted publishing (OIDC), without a token secret.
 
-For the first publish only, dispatch the workflow with `bootstrap=true`. npm requires an existing package before trusted publishing can be configured. Follow the npm browser login/2FA links shown in the job log; the workflow publishes the validated package, configures trust for `iteufel/mssql-parser` and `publish.yml`, then logs out. Subsequent releases run without this bootstrap step.
+For the first publish only, dispatch the workflow with `bootstrap=true`. npm requires an existing package before trusted publishing can be configured. Follow the npm browser login/2FA links shown in the job log; sign-in links expire after about five minutes, and the workflow retries with a new link up to three times. Use the newest link in "Sign in to npm for the first publish", then follow any separate approval links in "Publish package" and "Configure trusted publishing for future releases". The workflow publishes the validated package, configures trust for `iteufel/mssql-parser` and `publish.yml`, then logs out after a successful sign-in. Subsequent releases run without this bootstrap step.
 
 ## License
 
