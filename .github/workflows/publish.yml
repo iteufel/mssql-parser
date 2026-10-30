@@ -40,11 +40,14 @@ jobs:
         timeout-minutes: 15
         run: npm login --auth-type=web --no-browser
       - name: Publish package
-        run: npm publish --access public --provenance
+        timeout-minutes: 15
+        # npm only waits for browser 2FA when both streams are terminals.
+        # Normal OIDC releases do not prompt; bootstrap login does.
+        run: script -q -e -c 'npm publish --access public --provenance --no-browser' /dev/null
       - name: Configure trusted publishing for future releases
         if: inputs.bootstrap
         timeout-minutes: 10
-        run: npm trust github mssql-parser --repo iteufel/mssql-parser --file publish.yml --allow-publish --yes --no-browser
+        run: script -q -e -c 'npm trust github mssql-parser --repo iteufel/mssql-parser --file publish.yml --allow-publish --yes --no-browser' /dev/null
       - name: Remove bootstrap login
         if: always() && inputs.bootstrap
         run: npm logout --registry=https://registry.npmjs.org
