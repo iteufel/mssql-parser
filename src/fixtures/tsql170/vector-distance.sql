@@ -1,0 +1,1 @@
+SELECT VECTOR_DISTANCE('cosine', CAST('[1,2]' AS VECTOR(2)), CAST('[3,4]' AS VECTOR(2))) AS d;

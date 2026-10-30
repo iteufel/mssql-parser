@@ -1,0 +1,8 @@
+node_modules/
+dist/
+assets/
+dotnet/bin/
+dotnet/obj/
+*.tgz
+playwright-report/
+test-results/

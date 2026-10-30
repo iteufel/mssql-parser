@@ -1,0 +1,50 @@
+name: Publish to npm
+on:
+  release:
+    types: [published]
+  workflow_dispatch:
+    inputs:
+      bootstrap:
+        description: "First publish: sign in to npm via the browser link in the job log, then configure trusted publishing"
+        type: boolean
+        default: false
+permissions:
+  contents: read
+concurrency:
+  group: npm-publish
+  cancel-in-progress: false
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/validate
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+      - run: npm install --global npm@11.21.1
+      - name: Check release version
+        if: github.event_name == 'release'
+        env:
+          RELEASE_TAG: ${{ github.event.release.tag_name }}
+        run: |
+          bun -e 'const {version}=await Bun.file("package.json").json(); if(process.env.RELEASE_TAG !== `v${version}`) throw new Error("Release tag must match package version");'
+      # npm requires the package to exist before an OIDC trust can be configured.
+      # This one-time interactive web login runs on the runner; no npm token secret.
+      - name: Sign in to npm for the first publish
+        if: inputs.bootstrap
+        timeout-minutes: 15
+        run: npm login --auth-type=web --no-browser
+      - name: Publish package
+        run: npm publish --access public --provenance
+      - name: Configure trusted publishing for future releases
+        if: inputs.bootstrap
+        timeout-minutes: 10
+        run: npm trust github @iteufel/mssql-parser --repo iteufel/mssql-parser --file publish.yml --allow-publish --yes --no-browser
+      - name: Remove bootstrap login
+        if: always() && inputs.bootstrap
+        run: npm logout --registry=https://registry.npmjs.org

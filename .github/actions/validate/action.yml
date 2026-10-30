@@ -1,0 +1,21 @@
+name: Build and validate parser package
+description: Build precompiled .NET and browser assets and test the packed npm package.
+runs:
+  using: composite
+  steps:
+    - uses: oven-sh/setup-bun@v2
+      with:
+        bun-version: "1.4.4"
+    - uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: "8.0.x"
+    - run: bun install --frozen-lockfile
+      shell: bash
+    - run: bun run build
+      shell: bash
+    - run: bun test src
+      shell: bash
+    - run: bunx --bun playwright install --with-deps chromium
+      shell: bash
+    - run: bun run test:package
+      shell: bash

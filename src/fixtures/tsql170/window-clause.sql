@@ -1,0 +1,3 @@
+SELECT SUM(a) OVER win AS total
+FROM t
+WINDOW win AS (ORDER BY a);

@@ -1,0 +1,75 @@
+{
+  "name": "@iteufel/mssql-parser",
+  "version": "0.1.0",
+  "description": "SQL Server T-SQL parsing, generation, analysis and view graphs using Microsoft ScriptDOM, for Bun, Node.js and browsers.",
+  "type": "module",
+  "license": "MIT",
+  "author": "Allan Amstadt",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/iteufel/mssql-parser.git"
+  },
+  "homepage": "https://github.com/iteufel/mssql-parser#readme",
+  "bugs": {
+    "url": "https://github.com/iteufel/mssql-parser/issues"
+  },
+  "keywords": [
+    "mssql",
+    "sql-server",
+    "tsql",
+    "parser",
+    "scriptdom",
+    "wasm",
+    "typescript"
+  ],
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "sideEffects": false,
+  "exports": {
+    ".": {
+      "browser": {
+        "types": "./dist/browser.d.ts",
+        "default": "./dist/browser.js"
+      },
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    },
+    "./browser": {
+      "types": "./dist/browser.d.ts",
+      "default": "./dist/browser.js"
+    },
+    "./view-graph": {
+      "types": "./dist/lib/view-graph-model.d.ts",
+      "default": "./dist/lib/view-graph-model.js"
+    },
+    "./ast": {
+      "types": "./dist/lib/ast.generated.d.ts",
+      "default": "./dist/lib/ast.generated.js"
+    },
+    "./package.json": "./package.json",
+    "./assets/*": "./assets/*"
+  },
+  "files": [
+    "dist",
+    "assets",
+    "LICENSE",
+    "THIRD_PARTY_NOTICES.md"
+  ],
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  },
+  "packageManager": "bun@1.4.4",
+  "scripts": {
+    "build": "bun scripts/build.ts",
+    "build:js": "tsc -p tsconfig.json",
+    "test": "bun test src",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test:package": "bun scripts/test-package.ts"
+  },
+  "devDependencies": {
+    "@types/bun": "1.4.4",
+    "typescript": "6.0.3",
+    "@playwright/test": "1.64.1"
+  }
+}
