@@ -38,7 +38,7 @@ export function resolveCliHostDll(assetsPath?: string): string {
   const found = candidates.find((path) => existsSync(path));
   if (!found) {
     throw new Error(
-      "MSSQL parser host is missing. Reinstall @iteufel/mssql-parser or supply assetsPath with the packaged host files.",
+      "MSSQL parser host is missing. Reinstall mssql-parser or supply assetsPath with the packaged host files.",
     );
   }
   return found;

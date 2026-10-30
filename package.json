@@ -1,5 +1,5 @@
 {
-  "name": "@iteufel/mssql-parser",
+  "name": "mssql-parser",
   "version": "0.1.0",
   "description": "SQL Server T-SQL parsing, generation, analysis and view graphs using Microsoft ScriptDOM, for Bun, Node.js and browsers.",
   "type": "module",

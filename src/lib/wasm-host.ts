@@ -34,7 +34,7 @@ async function resolveDotnetJsUrl(assetsPath?: string): Promise<string> {
   const found = candidates.find((path) => existsSync(path));
   if (!found) {
     throw new Error(
-      "MSSQL parser WASM runtime is missing. Reinstall @iteufel/mssql-parser or supply assetsPath with the packaged WASM files.",
+      "MSSQL parser WASM runtime is missing. Reinstall mssql-parser or supply assetsPath with the packaged WASM files.",
     );
   }
   return pathToFileURL(found).href;

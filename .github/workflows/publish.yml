@@ -44,7 +44,7 @@ jobs:
       - name: Configure trusted publishing for future releases
         if: inputs.bootstrap
         timeout-minutes: 10
-        run: npm trust github @iteufel/mssql-parser --repo iteufel/mssql-parser --file publish.yml --allow-publish --yes --no-browser
+        run: npm trust github mssql-parser --repo iteufel/mssql-parser --file publish.yml --allow-publish --yes --no-browser
       - name: Remove bootstrap login
         if: always() && inputs.bootstrap
         run: npm logout --registry=https://registry.npmjs.org

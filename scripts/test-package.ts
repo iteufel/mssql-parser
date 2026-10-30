@@ -25,15 +25,15 @@ try {
     JSON.stringify({
       private: true,
       type: "module",
-      dependencies: { "@iteufel/mssql-parser": `file:${join(temp, tarball)}` },
+      dependencies: { "mssql-parser": `file:${join(temp, tarball)}` },
     }),
   );
   await run(["bun", "install", "--ignore-scripts"], consumer);
   await writeFile(
     join(consumer, "server.ts"),
     `
-import { parse, generate, tokenize, analyzeSqlReferences } from "@iteufel/mssql-parser";
-import { emptyViewGraph } from "@iteufel/mssql-parser/view-graph";
+import { parse, generate, tokenize, analyzeSqlReferences } from "mssql-parser";
+import { emptyViewGraph } from "mssql-parser/view-graph";
 import { strict as assert } from "node:assert";
 process.chdir("/");
 const result = parse("SELECT Id FROM dbo.Items;");
@@ -49,7 +49,7 @@ console.log("Installed package: host resolution and server API passed");
   await writeFile(
     join(consumer, "browser.ts"),
     `
-import { initMssqlParser, parse, generate, tokenize } from "@iteufel/mssql-parser";
+import { initMssqlParser, parse, generate, tokenize } from "mssql-parser";
 await initMssqlParser({ assetsPath: "/assets/wasm" });
 const result = parse("SELECT Id FROM dbo.Items;");
 globalThis.parserResult = { errors: result.errors, roundTrip: parse(generate(result.ast)).errors, tokens: tokenize("SELECT 1;").length };
@@ -62,7 +62,7 @@ globalThis.parserResult = { errors: result.errors, roundTrip: parse(generate(res
   });
   if (!built.success)
     throw new AggregateError(built.logs, "Browser export did not bundle");
-  const packageRoot = join(consumer, "node_modules/@iteufel/mssql-parser");
+  const packageRoot = join(consumer, "node_modules/mssql-parser");
   const server = Bun.serve({
     port: 0,
     hostname: "127.0.0.1",

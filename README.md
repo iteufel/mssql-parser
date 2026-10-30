@@ -1,11 +1,11 @@
-# @iteufel/mssql-parser
+# mssql-parser
 
 SQL Server T-SQL parsing, SQL generation, tokenization, reference analysis, and editable view graphs backed by Microsoft's ScriptDOM parser. Includes SQL Server 2025 syntax support, generated TypeScript AST types, a precompiled .NET CLI host, and a browser WebAssembly runtime.
 
 ## Install
 
 ```sh
-bun add @iteufel/mssql-parser
+bun add mssql-parser
 ```
 
 Server use requires the **.NET 8 runtime** on PATH (`dotnet`). No .NET SDK, compilation, or install scripts are required by consumers. Browser use requires only the packaged WebAssembly assets.
@@ -13,7 +13,7 @@ Server use requires the **.NET 8 runtime** on PATH (`dotnet`). No .NET SDK, comp
 ## Server (Bun or Node.js)
 
 ```ts
-import { parse, generate, collectObjectReferences } from '@iteufel/mssql-parser';
+import { parse, generate, collectObjectReferences } from 'mssql-parser';
 
 const result = parse('SELECT Id FROM dbo.Items;');
 if (result.ast && result.errors.length === 0) {
@@ -26,10 +26,10 @@ The host is resolved relative to the installed package, independently of the wor
 
 ## Browser and web workers
 
-Browser bundlers select the `browser` export automatically. An explicit `@iteufel/mssql-parser/browser` entry is also available. Copy the package's `assets/wasm` directory into your web application's static assets, preserving the `_framework` directory.
+Browser bundlers select the `browser` export automatically. An explicit `mssql-parser/browser` entry is also available. Copy the package's `assets/wasm` directory into your web application's static assets, preserving the `_framework` directory.
 
 ```ts
-import { initMssqlParser, parse } from '@iteufel/mssql-parser/browser';
+import { initMssqlParser, parse } from 'mssql-parser/browser';
 
 await initMssqlParser({ assetsPath: '/assets/mssql-parser' });
 console.log(parse('SELECT 1;'));
@@ -39,7 +39,7 @@ Serve `.wasm` files with `application/wasm`. The same API works inside module we
 
 ## Analysis and view graphs
 
-`analyzeSqlReferences(ast)` collects table/column usage. `sqlToViewGraph(sql)` and `viewDefinitionToPreviewSql(sql)` are available from the server entry. Runtime-independent graph editing and SQL serialization are available through `@iteufel/mssql-parser/view-graph` and can be imported by browser applications without loading the parser runtime. The complete generated AST types are exported through `@iteufel/mssql-parser/ast`.
+`analyzeSqlReferences(ast)` collects table/column usage. `sqlToViewGraph(sql)` and `viewDefinitionToPreviewSql(sql)` are available from the server entry. Runtime-independent graph editing and SQL serialization are available through `mssql-parser/view-graph` and can be imported by browser applications without loading the parser runtime. The complete generated AST types are exported through `mssql-parser/ast`.
 
 ## Development
 
